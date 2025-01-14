@@ -1,8 +1,7 @@
 package Main;
 import java.util.ArrayList;
-public class Developers extends Employers {
-	
-	private static String CREATE_TABLE_DEVELOPERS = "CREATE TABLE IF NOT EXISTS Developers(\r\n"
+public class Sviluppatore extends Dipendente {
+	private static String CREATE_TABLE_SVILUPPATORE = "CREATE TABLE IF NOT EXISTS Sviluppatore(\r\n"
 			+ "SviluppatoreID INT NOT NULL AUTO_INCREMENT,\r\n"
 			+ "DipendenteID INT NOT NULL,\r\n"
 			+ "TeamID INT NOT NULL, \r\n"
@@ -11,10 +10,25 @@ public class Developers extends Employers {
 			+ "PRIMARY KEY (SviluppatoreID));";
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private ArrayList<String> linguaggiConosciuti;
 	private ArrayList<Integer> progettiAssegnati;
 
-	public Developers(int id, String nome, String cognome, double stipendioBase, ArrayList<String> linguaggiConosciuti, ArrayList<Integer> progettiAssegnati) {
+	public Sviluppatore(int id, String nome, String cognome, double stipendioBase, ArrayList<String> linguaggiConosciuti, ArrayList<Integer> progettiAssegnati) {
 		super(id, nome, cognome, stipendioBase);
 		this.linguaggiConosciuti = linguaggiConosciuti;
 		this.progettiAssegnati = progettiAssegnati;
