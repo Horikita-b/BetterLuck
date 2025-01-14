@@ -2,6 +2,7 @@ package Main;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -75,4 +76,30 @@ public class Progetto {
             e.printStackTrace();
         }
     }
+
+
+
+//Read tutti i progetti
+	public static void readAllProgetti(Connection connection) {
+	String query = "SELECT * FROM Progetto";
+	
+	try (
+	Statement stmt = connection.createStatement();
+	ResultSet rs = stmt.executeQuery(query))
+	{
+		while (rs.next()) {
+                
+			int ProgettoID = rs.getInt("ProgettoID");
+			String NomeProgetto= rs.getString("NomeProgetto");
+			
+    System.out.printf("ProgettoID: %d | NomeProgetto: %s\n",
+    		ProgettoID, NomeProgetto);
+		}
+
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+}
+	
 }
