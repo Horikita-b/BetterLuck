@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,91 +19,67 @@ Il database deve contenere una tabella per i dipendenti e tabelle correlate per 
 public class Dipendente {
 	private static String CREATE_TABLE_DIPENDENTE = "CREATE TABLE IF NOT EXISTS Dipendente(\r\n"
 
-			+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n"
-			+ "Nome VARCHAR(30) NOT NULL,\r\n"
-			+ "Cognome VARCHAR(30) NOT NULL,\r\n"
-			+ "StipendioBase DOUBLE NOT NULL,\r\n"
-			+ "Ruolo VARCHAR(30) NOT NULL,\r\n"
-			+ "PRIMARY KEY (DipendenteID));";
-	
+			+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n" + "Nome VARCHAR(30) NOT NULL,\r\n"
+			+ "Cognome VARCHAR(30) NOT NULL,\r\n" + "StipendioBase DOUBLE NOT NULL,\r\n"
+			+ "Ruolo VARCHAR(30) NOT NULL,\r\n" + "PRIMARY KEY (DipendenteID));";
+
 	public static void createTableDipendente(Connection connection) {
-        try (
-             Statement stmt = connection.createStatement()) {
+		try (Statement stmt = connection.createStatement()) {
 
-            // Creazione tabella CLIENTS
-            String createTableDipendente = "CREATE TABLE IF NOT EXISTS Dipendente(\r\n"
-        			+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n"
-        			+ "Nome VARCHAR(30) NOT NULL,\r\n"
-        			+ "Cognome VARCHAR(30) NOT NULL,\r\n"
-        			+ "StipendioBase DOUBLE NOT NULL,\r\n"
-        			+ "Ruolo VARCHAR(30) NOT NULL,\r\n"
-        			+ "PRIMARY KEY (DipendenteID));";
-            
-            stmt.execute(createTableDipendente);
-	
+			// Creazione tabella CLIENTS
+			String createTableDipendente = "CREATE TABLE IF NOT EXISTS Dipendente(\r\n"
+					+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n" + "Nome VARCHAR(30) NOT NULL,\r\n"
+					+ "Cognome VARCHAR(30) NOT NULL,\r\n" + "StipendioBase DOUBLE NOT NULL,\r\n"
+					+ "Ruolo VARCHAR(30) NOT NULL,\r\n" + "PRIMARY KEY (DipendenteID));";
 
-            System.out.println("Tabella creata/verificata correttamente.");
+			stmt.execute(createTableDipendente);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+			System.out.println("Tabella creata/verificata correttamente.");
 
-	 public static void deleteDipendente(int DipendenteID,Connection connection) {
-	        String sql = "DELETE FROM Dipendente WHERE DipendenteID = ?";
-	        try (
-	             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
-	            pstmt.setInt(1, DipendenteID);
-	            int affectedRows = pstmt.executeUpdate();
-	            if (affectedRows > 0) {
-	                System.out.println("Dipendente con ID " + DipendenteID + " eliminato correttamente.");
-	            } else {
-	                System.out.println("Nessun dipendente eliminato. Verificare l'ID.");
-	            }
-
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
-
-	
-
-	
-
-	//2) Read Tutti Dipendenti
-	
-	public static void readAllDipendenti(Connection connection) {
-		String query = "SELECT * FROM Dipendente";
-				
-			try (
-			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(query))
-			{
-				while (rs.next()) {
-		                
-					int DipendenteID = rs.getInt("DipendenteID");
-					String Nome = rs.getString("Nome");
-					String Cognome = rs.getString("Cognome");
-					double StipendioBase= rs.getDouble("StipendioBase");
-					String Ruolo = rs.getString("Ruolo");
-
-		    System.out.printf("DipendenteID: %d | Nome: %s | Cognome: %s | StipendioBase: %.2f | Ruolo: %s\n",
-		    		DipendenteID, Nome, Cognome, StipendioBase, Ruolo);
-				}
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	
-	
-	
-	
-	
+	public static void deleteDipendente(int DipendenteID, Connection connection) {
+		String sql = "DELETE FROM Dipendente WHERE DipendenteID = ?";
+		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
-		
+			pstmt.setInt(1, DipendenteID);
+			int affectedRows = pstmt.executeUpdate();
+			if (affectedRows > 0) {
+				System.out.println("Dipendente con ID " + DipendenteID + " eliminato correttamente.");
+			} else {
+				System.out.println("Nessun dipendente eliminato. Verificare l'ID.");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// 2) Read Tutti Dipendenti
+
+	public static void readAllDipendenti(Connection connection) {
+		String query = "SELECT * FROM Dipendente";
+
+		try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+			while (rs.next()) {
+
+				int DipendenteID = rs.getInt("DipendenteID");
+				String Nome = rs.getString("Nome");
+				String Cognome = rs.getString("Cognome");
+				double StipendioBase = rs.getDouble("StipendioBase");
+				String Ruolo = rs.getString("Ruolo");
+
+				System.out.printf("DipendenteID: %d | Nome: %s | Cognome: %s | StipendioBase: %.2f | Ruolo: %s\n",
+						DipendenteID, Nome, Cognome, StipendioBase, Ruolo);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void aggiornaStipendioDipendente(Connection connection, double nuovoStipendio, int DipendenteID) {
 
@@ -112,7 +87,6 @@ public class Dipendente {
 
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 
-			
 			pstmt.setDouble(1, nuovoStipendio);
 			pstmt.setInt(2, DipendenteID);
 
@@ -132,7 +106,6 @@ public class Dipendente {
 			e.printStackTrace();
 		}
 	}
-
 
 	protected int id;
 	protected String nome;
