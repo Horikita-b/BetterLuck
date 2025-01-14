@@ -8,12 +8,18 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 /*Employee (classe base): rappresenta un dipendente generico, con attributi come id, nome, cognome, e stipendioBase.
 Manager (classe derivata): rappresenta un manager, con attributi aggiuntivi come bonus e teamGestito.
 Developer (classe derivata): rappresenta uno sviluppatore, con attributi come linguaggiConosciuti e progettiAssegnati.
 Il database deve contenere una tabella per i dipendenti e tabelle correlate per i progetti e i team. Deve essere possibile aggiungere, modificare, eliminare dipendenti, assegnarli a progetti e calcolare gli stipendi (considerando eventuali bonus). */
 public class Dipendente {
 	private static String CREATE_TABLE_DIPENDENTE = "CREATE TABLE IF NOT EXISTS Dipendente(\r\n"
+
 			+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n"
 			+ "Nome VARCHAR(30) NOT NULL,\r\n"
 			+ "Cognome VARCHAR(30) NOT NULL,\r\n"
@@ -90,13 +96,43 @@ public class Dipendente {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-   }
+	}
 
 	
 	
 	
 	
 	
+
+		
+
+	public static void aggiornaStipendioDipendente(Connection connection, double nuovoStipendio, int DipendenteID) {
+
+		final String query = "UPDATE Dipendente SET StipendioBase = ? WHERE DipendenteID = ?";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+			
+			pstmt.setDouble(1, nuovoStipendio);
+			pstmt.setInt(2, DipendenteID);
+
+			int righeAggiornate = pstmt.executeUpdate();
+
+			// Verifica se l'aggiornamento è riuscito
+			if (righeAggiornate > 0) {
+				System.out.println("Stipendio aggiornato con successo per il dipendente con ID: " + DipendenteID);
+			} else {
+				System.out.println("Nessun dipendente trovato con ID: " + DipendenteID);
+			}
+
+		} catch (
+
+		SQLException e) {
+			System.err.println("Errore durante l'aggiornamento dello stipendio: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 
 	protected int id;
 	protected String nome;
@@ -141,5 +177,9 @@ public class Dipendente {
 	public void setStipendioBase(double stipendioBase) {
 		this.stipendioBase = stipendioBase;
 	}
-	
-} 
+
+	public void aggiornaStipendioBaseSviluppatore(double stipendioBaseSviluppatore) {
+		this.stipendioBase = stipendioBaseSviluppatore;
+	}
+
+}
