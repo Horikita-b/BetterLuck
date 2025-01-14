@@ -82,4 +82,29 @@ public static void readAllTeams(Connection connection) {
 		}
 
 }
+public static int insertTeam(Connection connection,String nome) {
+    String sql = "INSERT INTO Team (NomeTeam) VALUES (?)";
+    try (
+         PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+        pstmt.setString(1, nome);
+
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Creazione team fallita, nessuna riga aggiunta.");
+        }
+
+        // Recupero la chiave generata (ID auto-increment)
+        try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Creazione team fallita, ID non recuperato.");
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return -1; // In caso di errore
+}
 }

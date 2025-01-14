@@ -101,5 +101,30 @@ public class Progetto {
 	}
 
 }
+	 public static int insertProgetto(Connection connection,String nome) {
+	        String sql = "INSERT INTO Progetto (NomeProgetto) VALUES (?)";
+	        try (
+	             PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+	            pstmt.setString(1, nome);
+
+	            int affectedRows = pstmt.executeUpdate();
+	            if (affectedRows == 0) {
+	                throw new SQLException("Creazione progetto fallita, nessuna riga aggiunta.");
+	            }
+
+	            // Recupero la chiave generata (ID auto-increment)
+	            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+	                if (generatedKeys.next()) {
+	                    return generatedKeys.getInt(1);
+	                } else {
+	                    throw new SQLException("Creazione progetto fallita, ID non recuperato.");
+	                }
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return -1; // In caso di errore
+	 }
 	
 }
