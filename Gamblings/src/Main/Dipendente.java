@@ -1,5 +1,10 @@
 package Main;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 /*Employee (classe base): rappresenta un dipendente generico, con attributi come id, nome, cognome, e stipendioBase.
 Manager (classe derivata): rappresenta un manager, con attributi aggiuntivi come bonus e teamGestito.
 Developer (classe derivata): rappresenta uno sviluppatore, con attributi come linguaggiConosciuti e progettiAssegnati.
@@ -13,11 +18,28 @@ public class Dipendente {
 			+ "Ruolo VARCHAR(30) NOT NULL,\r\n"
 			+ "PRIMARY KEY (DipendenteID));";
 	
+	public static void createTableDipendente(Connection connection) {
+        try (
+             Statement stmt = connection.createStatement()) {
+
+            // Creazione tabella CLIENTS
+            String createTableDipendente = "CREATE TABLE IF NOT EXISTS Dipendente(\r\n"
+        			+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n"
+        			+ "Nome VARCHAR(30) NOT NULL,\r\n"
+        			+ "Cognome VARCHAR(30) NOT NULL,\r\n"
+        			+ "StipendioBase DOUBLE NOT NULL,\r\n"
+        			+ "Ruolo VARCHAR(30) NOT NULL,\r\n"
+        			+ "PRIMARY KEY (DipendenteID));";
+            
+            stmt.execute(createTableDipendente);
 	
-	
-	
-	
-	
+            System.out.println("Tabella creata/verificata correttamente.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 	
 	
 	
