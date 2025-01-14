@@ -1,5 +1,12 @@
 package Main;
 
+import java.sql.Statement;
+
+import java.sql.SQLException;
+
+import java.sql.ResultSet;
+import java.sql.Connection;
+
 /*Employee (classe base): rappresenta un dipendente generico, con attributi come id, nome, cognome, e stipendioBase.
 Manager (classe derivata): rappresenta un manager, con attributi aggiuntivi come bonus e teamGestito.
 Developer (classe derivata): rappresenta uno sviluppatore, con attributi come linguaggiConosciuti e progettiAssegnati.
@@ -14,15 +21,31 @@ public class Dipendente {
 			+ "PRIMARY KEY (DipendenteID));";
 	
 	
+	//2) Read Tutti Dipendenti
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	public static void readAllDipendenti(Connection connection) {
+		String query = "SELECT * FROM Dipendente";
+				
+			try (
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(query))
+			{
+				while (rs.next()) {
+		                
+					int DipendenteID = rs.getInt("DipendenteID");
+					String Nome = rs.getString("Nome");
+					String Cognome = rs.getString("Cognome");
+					double StipendioBase= rs.getDouble("StipendioBase");
+					String Ruolo = rs.getString("Ruolo");
+
+		    System.out.printf("DipendenteID: %d | Nome: %s | Cognome: %s | StipendioBase: %.2f | Ruolo: %s\n",
+		    		DipendenteID, Nome, Cognome, StipendioBase, Ruolo);
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+   }
 	
 	
 	

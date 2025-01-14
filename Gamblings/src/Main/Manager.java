@@ -1,5 +1,9 @@
 package Main;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Manager extends Dipendente {  
@@ -12,9 +16,30 @@ public class Manager extends Dipendente {
 			+ "ON UPDATE CASCADE,\r\n"
 			+ "PRIMARY KEY (ManagerID));";
 	
+	 // 6) Read Tutti Manager 
 	
-	
-	
+	public static void readAllManager(Connection connection) {
+		String query = "SELECT manager.ManagerID, dipendente.Nome, dipendente.Cognome, manager.Bonus FROM Manager INNER JOIN dipendente ON Manager.DipendenteID = dipendente.DipendenteID ";
+				
+			try (
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(query))
+			{
+				while (rs.next()) {
+		                
+					int ManagerID = rs.getInt("ManagerID");
+					String Nome = rs.getString("Nome");
+					String Cognome = rs.getString("Cognome");
+					double Bonus= rs.getDouble("Bonus");
+					
+		    System.out.printf("ManagerID: %d | Nome: %s | Cognome: %s | Bonus: %.2f\n" ,
+		    		ManagerID, Nome, Cognome, Bonus);
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	}
 	
 	
 	
