@@ -16,5 +16,18 @@ public class DBManager {
 	DBManager(String nomeDatabase) throws SQLException{
 		this.connection = DriverManager.getConnection(URL + nomeDatabase, USER, PASSWORD);
 	}
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+	
+	public void closeConnection() {
+		try {
+			this.connection.close();
+		} catch (SQLException e) {
+			System.out.println("Chiusura connection non e' andato a buon fine");
+		}
+	}
 	
 }

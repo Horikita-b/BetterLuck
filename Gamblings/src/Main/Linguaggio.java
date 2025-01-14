@@ -61,8 +61,9 @@ public class Linguaggio {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
     }
+	
+	
 	public static void deleteLinguaggio(int LinguaggioID,Connection connection) {
         String sql = "DELETE FROM Linguaggio WHERE LinguaggioID = ?";
         try (
