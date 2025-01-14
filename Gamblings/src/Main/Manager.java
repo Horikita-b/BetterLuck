@@ -1,5 +1,8 @@
 package Main;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Manager extends Dipendente {  
@@ -13,7 +16,28 @@ public class Manager extends Dipendente {
 			+ "PRIMARY KEY (ManagerID));";
 	
 	
+	public static void createTableManager(Connection connection) {
+        try (
+             Statement stmt = connection.createStatement()) {
+
+            // Creazione tabella CLIENTS
+            String createTableManager = "CREATE TABLE IF NOT EXISTS Manager(\r\n"
+        			+ "ManagerID INT NOT NULL AUTO_INCREMENT,\r\n"
+        			+ "DipendenteID INT NOT NULL,\r\n"
+        			+ "Bonus DOUBLE NOT NULL,\r\n"
+        			+ "FOREIGN KEY(DipendenteID) REFERENCES dipendente(DipendenteID)\r\n"
+        			+ "ON DELETE CASCADE\r\n"
+        			+ "ON UPDATE CASCADE,\r\n"
+        			+ "PRIMARY KEY (ManagerID));";
+            
+            stmt.execute(createTableManager);
 	
+            System.out.println("Tabella creata/verificata correttamente.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	
 	
