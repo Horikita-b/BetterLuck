@@ -1,6 +1,14 @@
 package Main;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -10,30 +18,94 @@ Developer (classe derivata): rappresenta uno sviluppatore, con attributi come li
 Il database deve contenere una tabella per i dipendenti e tabelle correlate per i progetti e i team. Deve essere possibile aggiungere, modificare, eliminare dipendenti, assegnarli a progetti e calcolare gli stipendi (considerando eventuali bonus). */
 public class Dipendente {
 	private static String CREATE_TABLE_DIPENDENTE = "CREATE TABLE IF NOT EXISTS Dipendente(\r\n"
-			+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n"
-			+ "Nome VARCHAR(30) NOT NULL,\r\n"
-			+ "Cognome VARCHAR(30) NOT NULL,\r\n"
-			+ "StipendioBase DOUBLE NOT NULL,\r\n"
-			+ "Ruolo VARCHAR(30) NOT NULL,\r\n"
-			+ "PRIMARY KEY (DipendenteID));";
-	
-	
-	public static  void createDipendente(Connection connection, String nome, String cognome, double stipendioBase, String ruolo) throws SQLException{
-		String query = "INSERT INTO dipendente VALUES (NULL, ?, ?, ?, ?)";
-		PreparedStatement pstmt = connection.prepareStatement(query);
+
+			+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n" + "Nome VARCHAR(30) NOT NULL,\r\n"
+			+ "Cognome VARCHAR(30) NOT NULL,\r\n" + "StipendioBase DOUBLE NOT NULL,\r\n"
+			+ "Ruolo VARCHAR(30) NOT NULL,\r\n" + "PRIMARY KEY (DipendenteID));";
+
+	public static void createTableDipendente(Connection connection) {
+		try (Statement stmt = connection.createStatement()) {
+
+			// Creazione tabella CLIENTS
+			String createTableDipendente = "CREATE TABLE IF NOT EXISTS Dipendente(\r\n"
+					+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n" + "Nome VARCHAR(30) NOT NULL,\r\n"
+					+ "Cognome VARCHAR(30) NOT NULL,\r\n" + "StipendioBase DOUBLE NOT NULL,\r\n"
+					+ "Ruolo VARCHAR(30) NOT NULL,\r\n" + "PRIMARY KEY (DipendenteID));";
+
+			stmt.execute(createTableDipendente);
+
+			System.out.println("Tabella creata/verificata correttamente.");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	public static  void readStipendioTotale(Connection connection) {
-		String query = "SELECT SUM(dipendente.StipendioBase + manager.bonus) FROM dipendente INNER JOIN manager ON dipendente.DipendenteID = manager.";
+
+	public static void deleteDipendente(int DipendenteID, Connection connection) {
+		String sql = "DELETE FROM Dipendente WHERE DipendenteID = ?";
+		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+			pstmt.setInt(1, DipendenteID);
+			int affectedRows = pstmt.executeUpdate();
+			if (affectedRows > 0) {
+				System.out.println("Dipendente con ID " + DipendenteID + " eliminato correttamente.");
+			} else {
+				System.out.println("Nessun dipendente eliminato. Verificare l'ID.");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
+	// 2) Read Tutti Dipendenti
+
+	public static void readAllDipendenti(Connection connection) {
+		String query = "SELECT * FROM Dipendente";
+
+		try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+			while (rs.next()) {
+
+				int DipendenteID = rs.getInt("DipendenteID");
+				String Nome = rs.getString("Nome");
+				String Cognome = rs.getString("Cognome");
+				double StipendioBase = rs.getDouble("StipendioBase");
+				String Ruolo = rs.getString("Ruolo");
+
+				System.out.printf("DipendenteID: %d | Nome: %s | Cognome: %s | StipendioBase: %.2f | Ruolo: %s\n",
+						DipendenteID, Nome, Cognome, StipendioBase, Ruolo);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void aggiornaStipendioDipendente(Connection connection, double nuovoStipendio, int DipendenteID) {
+
+		final String query = "UPDATE Dipendente SET StipendioBase = ? WHERE DipendenteID = ?";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+			pstmt.setDouble(1, nuovoStipendio);
+			pstmt.setInt(2, DipendenteID);
+
+			int righeAggiornate = pstmt.executeUpdate();
+
+			// Verifica se l'aggiornamento è riuscito
+			if (righeAggiornate > 0) {
+				System.out.println("Stipendio aggiornato con successo per il dipendente con ID: " + DipendenteID);
+			} else {
+				System.out.println("Nessun dipendente trovato con ID: " + DipendenteID);
+			}
+
+		} catch (
+
+		SQLException e) {
+			System.err.println("Errore durante l'aggiornamento dello stipendio: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
 	protected int id;
 	protected String nome;
@@ -78,5 +150,9 @@ public class Dipendente {
 	public void setStipendioBase(double stipendioBase) {
 		this.stipendioBase = stipendioBase;
 	}
-	
-} 
+
+	public void aggiornaStipendioBaseSviluppatore(double stipendioBaseSviluppatore) {
+		this.stipendioBase = stipendioBaseSviluppatore;
+	}
+
+}
