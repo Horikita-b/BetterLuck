@@ -1,6 +1,7 @@
 package Main;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -60,4 +61,22 @@ public class Linguaggio {
         }
         
     }
+	public static void deleteLinguaggio(int LinguaggioID,Connection connection) {
+        String sql = "DELETE FROM Linguaggio WHERE LinguaggioID = ?";
+        try (
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, LinguaggioID);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Linguaggio con ID " + LinguaggioID + " eliminato correttamente.");
+            } else {
+                System.out.println("Nessun linguaggio eliminato. Verificare l'ID.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

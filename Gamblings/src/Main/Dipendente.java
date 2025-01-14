@@ -2,6 +2,7 @@ package Main;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -39,6 +40,24 @@ public class Dipendente {
             e.printStackTrace();
         }
     }
+
+	 public static void deleteDipendente(int DipendenteID,Connection connection) {
+	        String sql = "DELETE FROM Dipendente WHERE DipendenteID = ?";
+	        try (
+	             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+	            pstmt.setInt(1, DipendenteID);
+	            int affectedRows = pstmt.executeUpdate();
+	            if (affectedRows > 0) {
+	                System.out.println("Dipendente con ID " + DipendenteID + " eliminato correttamente.");
+	            } else {
+	                System.out.println("Nessun dipendente eliminato. Verificare l'ID.");
+	            }
+
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
 
 	
 	

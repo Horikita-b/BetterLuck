@@ -1,6 +1,7 @@
 package Main;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -33,5 +34,22 @@ public class Team {
             e.printStackTrace();
         }
         
+    }
+	public static void deleteTeam(int TeamID,Connection connection) {
+        String sql = "DELETE FROM Team WHERE TeamID = ?";
+        try (
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, TeamID);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Team con ID " + TeamID + " eliminato correttamente.");
+            } else {
+                System.out.println("Nessun Team eliminato. Verificare l'ID.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

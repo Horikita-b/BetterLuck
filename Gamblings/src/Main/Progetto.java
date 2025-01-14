@@ -1,6 +1,7 @@
 package Main;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -52,6 +53,23 @@ public class Progetto {
             stmt.execute(createTableSviluppatoreProgetto);
 	
             System.out.println("Tabella creata/verificata correttamente.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+	public static void deleteProgetto(int ProgettoID,Connection connection) {
+        String sql = "DELETE FROM Progetto WHERE ProgettoID = ?";
+        try (
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, ProgettoID);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Progetto con ID " + ProgettoID + " eliminato correttamente.");
+            } else {
+                System.out.println("Nessun Progetto eliminato. Verificare l'ID.");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
