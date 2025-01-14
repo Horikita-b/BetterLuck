@@ -2,21 +2,6 @@ package Main;
 
 public class Main {
 
-
-//	public static void create___(String ruolo) {
-//		chiama createDipendente -> PK
-//		if (ruolo == Developer) {
-//			chiama createSviluppatore(PK)
-//		} else {
-//			chiama createManager(PK)
-//		}
-//	}
-//	sysout -> Quali linguaggu conosce?
-//			read All Linguaggi
-//			scanner linguaggiID
-//			
-//		id - Nome - Cognome - StipendiBase - Ruolo
-//		id - Nome - Cognome - StipendioBase -
 	
 	public static void main(String[] args) {
 		/* C R U D
