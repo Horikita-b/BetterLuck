@@ -1,4 +1,5 @@
 package Main;
+import java.sql.Connection;
 import java.util.ArrayList;
 public class Sviluppatore extends Dipendente {
 	private static String CREATE_TABLE_SVILUPPATORE = "CREATE TABLE IF NOT EXISTS Sviluppatore(\r\n"
@@ -10,17 +11,9 @@ public class Sviluppatore extends Dipendente {
 			+ "PRIMARY KEY (SviluppatoreID));";
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public static void createSviluppatore(Connection connection, ) {
+		
+	}
 	
 	
 	

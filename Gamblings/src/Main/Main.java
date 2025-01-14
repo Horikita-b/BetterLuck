@@ -1,8 +1,11 @@
 package Main;
 
 public class Main {
-
 	
+	
+	// Abbiamo fatto finora
+	1, 6, 6, 11, 16, 21, 14 ,19, 24
+	{
 	public static void main(String[] args) {
 		/* C R U D
 		 * 
@@ -10,8 +13,8 @@ public class Main {
 		 * 1) Create Dipendente (Sviluppatore o Manager) // fai i metodi createSviluppatore e createManager
 		 * 2) Read Tutti Dipendenti
 		 * 3) Read Dipendente by ID !!!!!!!!
-		 * 4) UpdateDipendente -> Stipendio
-		 * 5) Delete Dipendente by ID
+		 * 4) UpdateDipendente -> Stipendio -> Connection connection, id , nuovo valore 
+		 * 5) Delete Dipendente by ID -> 
 		 * 
 		 *  TUTTI GLI SVILUPPATORI
 		 * 6) Read Tutti Sviluppatori 
@@ -31,8 +34,8 @@ public class Main {
 		 * 10) Create Linguaggi
 		 * 11) Read Tutti Linguaggi
 		 * 12) ====
-		 * 13) Update LinguaggiConosciuti di uno sviluppatore
-		 * 14) Delete LinguaggiConosciuti di uno sviluppatore
+		 * 13) Update LinguaggiConosciuti di uno sviluppatore -> 
+		 * 14) Delete Linguaggio di uno sviluppatore
 		 * 
 		 * Tutti i TEAM
 		 * 15) Create Team

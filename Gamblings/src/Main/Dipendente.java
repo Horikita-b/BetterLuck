@@ -1,5 +1,9 @@
 package Main;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 /*Employee (classe base): rappresenta un dipendente generico, con attributi come id, nome, cognome, e stipendioBase.
 Manager (classe derivata): rappresenta un manager, con attributi aggiuntivi come bonus e teamGestito.
 Developer (classe derivata): rappresenta uno sviluppatore, con attributi come linguaggiConosciuti e progettiAssegnati.
@@ -14,12 +18,14 @@ public class Dipendente {
 			+ "PRIMARY KEY (DipendenteID));";
 	
 	
+	public static  void createDipendente(Connection connection, String nome, String cognome, double stipendioBase, String ruolo) throws SQLException{
+		String query = "INSERT INTO dipendente VALUES (NULL, ?, ?, ?, ?)";
+		PreparedStatement pstmt = connection.prepareStatement(query);
+	}
 	
-	
-	
-	
-	
-	
+	public static  void readStipendioTotale(Connection connection) {
+		String query = "SELECT SUM(dipendente.StipendioBase + manager.bonus) FROM dipendente INNER JOIN manager ON dipendente.DipendenteID = manager.";
+	}
 	
 	
 	
