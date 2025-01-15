@@ -11,7 +11,7 @@ Manager (classe derivata): rappresenta un manager, con attributi aggiuntivi come
 Developer (classe derivata): rappresenta uno sviluppatore, con attributi come linguaggiConosciuti e progettiAssegnati.
 Il database deve contenere una tabella per i dipendenti e tabelle correlate per i progetti e i team. Deve essere possibile aggiungere, modificare, eliminare dipendenti, assegnarli a progetti e calcolare gli stipendi (considerando eventuali bonus). */
 public class Dipendente {
-	
+
 	public static void createTableDipendente(Connection connection) {
 		try (Statement stmt = connection.createStatement()) {
 

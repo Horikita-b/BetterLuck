@@ -11,10 +11,7 @@ public class Main {
 	// Attenzione con JOIN multipli
 
 	// DA FARE
-	// Aggiustare readAllSviluppatori
 	
-	// Create Dipendenti (Sviluppatori e Manager)
-	// Aggiungere Dipendente(Sviluppatore/Manager)
 	// Aggiornare Sviluppatore (Aggiungere/Togliere un linguaggioConosciuto, Cambiare Team, Aggiungere/Togliere Progetti)
 	// Aggiornare Manager (Cambiare Bonus)
 	// Aggiornare Team -> aggiornare il suo ManagerID
@@ -147,6 +144,12 @@ public class Main {
 					Dipendente.aggiornaStipendioDipendente(conn, nuovo_stipendio, id_dipendente);
 				}
 					break;
+				case 51: {
+					Team.readAllTeams(conn);
+					System.out.println("Quale team?");
+					int team_id = scanner.nextInt();
+					Team.readDipendentiTeam(conn, team_id);
+				}
 				case 99:
 					System.out.println("Sei uscito dal programma");
 				}

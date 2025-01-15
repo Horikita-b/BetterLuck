@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Team {
-	
+
 	public static void createTableTeam(Connection connection) {
 		try (Statement stmt = connection.createStatement()) {
 			final String CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS Team(\r\n"
@@ -63,5 +63,28 @@ public class Team {
 			e.printStackTrace();
 		}
 
+	}
+
+	public static void readDipendentiTeam(Connection connection, int TeamID) {
+		String query = "SELECT dipendente.Nome, dipendente.Cognome FROM sviluppatore LEFT JOIN dipendente ON sviluppatore.DipendenteID = dipendente.DipendenteID WHERE TeamID = ?";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+			pstmt.setInt(1, TeamID);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+
+					String Nome = rs.getString("Nome");
+					String Cognome = rs.getString("Cognome");
+
+					System.out.printf("| Nome: %s | Cognome: %s", Nome, Cognome);
+
+				}
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
