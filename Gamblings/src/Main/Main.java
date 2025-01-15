@@ -51,7 +51,7 @@ public class Main {
 		 * 25) Calcola Uscite stipendi sum(stipendiBase + bonus)
 		 * 
 		 */
-	
+		
 		
 	}
 }

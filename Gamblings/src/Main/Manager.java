@@ -1,6 +1,7 @@
 package Main;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -42,6 +43,7 @@ public class Manager extends Dipendente {
         }
     }
 	
+	
 	public static void readAllManager(Connection connection) {
 		String query = "SELECT manager.ManagerID, dipendente.Nome, dipendente.Cognome, manager.Bonus FROM Manager INNER JOIN dipendente ON Manager.DipendenteID = dipendente.DipendenteID ";
 				
@@ -66,6 +68,28 @@ public class Manager extends Dipendente {
 	}
 	
 	
+	public static int insertManager (int DipendenteID, double Bonus, Connection connection) {
+	String sql = "INSERT INTO Manager(DipendenteID, Bonus) VALUES (?,?)";
+	try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
+		 
+		 
+		 pstmt.setInt(1, DipendenteID);
+		 pstmt.setDouble(2, Bonus);
+		 
+		 int affectedRows = pstmt.executeUpdate();
+	        
+	        if (affectedRows > 0) {
+	            
+	            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+	                if (generatedKeys.next()) {
+	                    return generatedKeys.getInt(1);
+	                }
+	            }
+	        }
+		 }	catch (SQLException e) {
+			e.printStackTrace();
+		 }return -1;
+	}
 	
 	
 	private double bonus;
