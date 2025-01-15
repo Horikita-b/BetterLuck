@@ -4,6 +4,7 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 public class Sviluppatore extends Dipendente {
@@ -19,6 +20,7 @@ public class Sviluppatore extends Dipendente {
 					+ "FOREIGN KEY(TeamID) REFERENCES team(TeamID) ON DELETE SET NULL,\r\n"
 					+ "PRIMARY KEY (SviluppatoreID));";
 
+
 			stmt.execute(CREATE_TABLE_SVILUPPATORE);
 
 			// 6) Read Tutti Sviluppatori
@@ -32,21 +34,55 @@ public class Sviluppatore extends Dipendente {
 	}
 
 	public static void readAllSviluppatori(Connection connection) {
-		String query = "SELECT * FROM Sviluppatore";
 
-		try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-			while (rs.next()) {
-				int SviluppatoreID = rs.getInt("DipendenteID");
-				int DipendenteID = rs.getInt("DipendenteID");
-				int TeamID = rs.getInt("TeamID");
-
-				System.out.printf("SviluppatoreID: %d | DipendenteID: %d | TeamID: %d\n", SviluppatoreID, DipendenteID,
-						TeamID);
-			}
-		} catch (SQLException e) {
+		String query = "SELECT sviluppatore.SviluppatoreID, dipendente.Nome, dipendente.Cognome FROM Sviluppatore INNER JOIN dipendente ON Sviluppatore.DipendenteID = dipendente.DipendenteID ";
+				
+			try (
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(query))
+			{
+				while (rs.next()) {
+		                
+					int SviluppatoreID = rs.getInt("SviluppatoreID");
+					String Nome = rs.getString("Nome");
+					String Cognome = rs.getString("Cognome");
+					
+		    System.out.printf("SviluppatoreID: %d | Nome: %s | Cognome: %s " ,
+		    		SviluppatoreID, Nome, Cognome);
+				}
+			}catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+
+
+
+	
+	
+	public static int insertSviluppatore (int DipendenteID, int TeamID, Connection connection) {
+		 String sql = "INSERT INTO Sviluppatore(DipendenteID, TeamID) VALUES (?,?)";
+		 try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
+			 
+			 pstmt.setInt(1, DipendenteID);
+			 pstmt.setInt(2, TeamID);
+			 
+			 int affectedRows = pstmt.executeUpdate();
+		        
+		        if (affectedRows > 0) {
+		            
+		            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+		                if (generatedKeys.next()) {
+		                    return generatedKeys.getInt(1);
+		                }
+		            }
+		        }
+			 }	catch (SQLException e) {
+				e.printStackTrace();
+			 }return -1;
+		}	
+	
+	
+	
 
 	private ArrayList<String> linguaggiConosciuti;
 	private ArrayList<Integer> progettiAssegnati;
