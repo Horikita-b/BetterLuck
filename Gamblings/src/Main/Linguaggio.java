@@ -115,4 +115,52 @@ public class Linguaggio {
 			e.printStackTrace();
 		}
 	}
+	
+	//metodo per aggiungere un linguaggio ad uno sviluppatore
+	
+	public void inserisciLinguaggioSviluppatore(Connection connection, int SviluppatoreID, int LinguaggioID) {
+       
+
+        String query = "INSERT INTO sviluppatore_linguaggio (SviluppatoreID, LinguaggioID) VALUES (?, ?)";
+
+        try ( 
+        		PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setInt(1, SviluppatoreID);
+            pstmt.setInt(2, LinguaggioID);
+
+            pstmt.executeUpdate();  // Esegui l'inserimento
+            
+            int rowsAffected = pstmt.executeUpdate();  // Esegui l'inserimento
+            if (rowsAffected > 0) {
+                System.out.println("Linguaggio inserito correttamente.");
+            } else {
+                System.out.println("Errore: Nessun linguaggio inserito.");  //controlli
+            }
+        } catch (SQLException e) {
+            System.out.println("Errore durante l'inserimento: " + e.getMessage());
+        }
+    }
+	
+	public void rimuoviLinguaggioSviluppatore(Connection connection, int SviluppatoreID, int LinguaggioID) {
+		
+	    String query = "DELETE FROM sviluppatore_linguaggio WHERE SviluppatoreID = ? AND LinguaggioID = ?";
+
+	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+	        pstmt.setInt(1, SviluppatoreID);  // Imposta l'ID dello sviluppatore
+	        pstmt.setInt(2, LinguaggioID);    // Imposta l'ID del linguaggio
+
+	        int rowsAffected = pstmt.executeUpdate();  // Esegui il delete
+
+	        if (rowsAffected > 0) {
+	            System.out.println("Linguaggio rimosso correttamente dallo sviluppatore.");
+	        } else {
+	            System.out.println("Nessun linguaggio trovato per lo sviluppatore con questi ID.");   //controlli
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Errore durante la rimozione: " + e.getMessage());
+	    }
+	}
+	
+	
 }

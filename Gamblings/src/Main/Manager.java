@@ -1,6 +1,7 @@
 package Main;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -65,7 +66,31 @@ public class Manager extends Dipendente {
 			}
 	}
 	
-	
+	public static void aggiornaBonus(Connection connection, double Bonus, int DipendenteID ) {
+
+		final String query = "UPDATE Dipendente SET StipendioBase = ? WHERE DipendenteID = ?";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+			pstmt.setDouble(1, Bonus);
+			pstmt.setInt(2, DipendenteID);
+
+			int righeAggiornate = pstmt.executeUpdate();
+
+			// Verifica se l'aggiornamento è riuscito
+			if (righeAggiornate > 0) {
+				System.out.println("Bonus aggiornato con successo per il dipendente con ID: " + DipendenteID);
+			} else {
+				System.out.println("Nessun bonus trovato con ID: " + DipendenteID);
+			}
+
+		} catch (
+
+		SQLException e) {
+			System.err.println("Errore durante l'aggiornamento del bonus: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 	
 	
 	private double bonus;
