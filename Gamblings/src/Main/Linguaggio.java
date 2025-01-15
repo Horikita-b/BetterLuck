@@ -5,6 +5,7 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class Linguaggio {
 	
@@ -81,4 +82,30 @@ public class Linguaggio {
 			e.printStackTrace();
 		}
 	}
+	 public static int insertLinguaggio(Connection connection,String nome) {
+	        String sql = "INSERT INTO Linguaggio (Nome) VALUES (?)";
+	        try (
+	             PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+	            pstmt.setString(1, nome);
+
+	            int affectedRows = pstmt.executeUpdate();
+	            if (affectedRows == 0) {
+	                throw new SQLException("Creazione linguaggio fallita, nessuna riga aggiunta.");
+	            }
+
+	            // Recupero la chiave generata (ID auto-increment)
+	            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+	                if (generatedKeys.next()) {
+	                    return generatedKeys.getInt(1);
+	                } else {
+	                    throw new SQLException("Creazione linguaggio fallita, ID non recuperato.");
+	                }
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return -1; // In caso di errore
+	 }
+	 
 }
