@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 Manager (classe derivata): rappresenta un manager, con attributi aggiuntivi come bonus e teamGestito.
 Developer (classe derivata): rappresenta uno sviluppatore, con attributi come linguaggiConosciuti e progettiAssegnati.
 Il database deve contenere una tabella per i dipendenti e tabelle correlate per i progetti e i team. Deve essere possibile aggiungere, modificare, eliminare dipendenti, assegnarli a progetti e calcolare gli stipendi (considerando eventuali bonus). */
+
 public class Dipendente {
 
 	public static void createTableDipendente(Connection connection) {
@@ -29,6 +30,30 @@ public class Dipendente {
 			e.printStackTrace();
 		}
 	}
+	public static int insertDipendente (String Nome, String Cognome, double StipendioBase, String Ruolo, Connection connection) {
+		 String sql = "INSERT INTO Dipendente(Nome, Cognome, StipendioBase, Ruolo) VALUES (?,?,?,?)";
+		 try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
+			 
+			 pstmt.setString(1, Nome);
+			 pstmt.setString(2, Cognome);
+			 pstmt.setDouble(3, StipendioBase);
+			 pstmt.setString(4, Ruolo);
+			 
+			 int affectedRows = pstmt.executeUpdate();
+		        
+		        if (affectedRows > 0) {
+		            
+		            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+		                if (generatedKeys.next()) {
+		                    return generatedKeys.getInt(1);
+		                }
+		            }
+		        }
+			 }	catch (SQLException e) {
+				e.printStackTrace();
+			 }return -1;
+		}	
+		
 
 	public static void deleteDipendente(Connection connection, int DipendenteID) {
 		String sql = "DELETE FROM Dipendente WHERE DipendenteID = ?";
@@ -46,6 +71,32 @@ public class Dipendente {
 			e.printStackTrace();
 		}
 	}
+	
+	// INSERT INTO Dipendente
+	
+	public static int insertDipendente (String Nome, String Cognome, double StipendioBase, String Ruolo, Connection connection) {
+	 String sql = "INSERT INTO Dipendente(Nome, Cognome, StipendioBase, Ruolo) VALUES (?,?,?,?)";
+	 try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
+		 
+		 pstmt.setString(1, Nome);
+		 pstmt.setString(2, Cognome);
+		 pstmt.setDouble(3, StipendioBase);
+		 pstmt.setString(4, Ruolo);
+		 
+		 int affectedRows = pstmt.executeUpdate();
+	        
+	        if (affectedRows > 0) {
+	            
+	            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+	                if (generatedKeys.next()) {
+	                    return generatedKeys.getInt(1);
+	                }
+	            }
+	        }
+		 }	catch (SQLException e) {
+			e.printStackTrace();
+		 }return -1;
+	}	
 
 	public static void readAllDipendenti(Connection connection) {
 		String query = "SELECT * FROM Dipendente";

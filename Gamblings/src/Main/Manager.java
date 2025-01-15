@@ -1,6 +1,7 @@
 package Main;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -45,6 +46,60 @@ public class Manager extends Dipendente {
 			e.printStackTrace();
 		}
 	}
+
+
+	public static int insertManager(int DipendenteID, double Bonus, Connection connection) {
+		String sql = "INSERT INTO Manager(DipendenteID, Bonus) VALUES (?,?)";
+		try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+			pstmt.setInt(1, DipendenteID);
+			pstmt.setDouble(2, Bonus);
+
+			int affectedRows = pstmt.executeUpdate();
+
+			if (affectedRows > 0) {
+
+				try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						return generatedKeys.getInt(1);
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
+
+	
+	public static void aggiornaBonus(Connection connection, double Bonus, int DipendenteID ) {
+
+		final String query = "UPDATE Dipendente SET StipendioBase = ? WHERE DipendenteID = ?";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+			pstmt.setDouble(1, Bonus);
+			pstmt.setInt(2, DipendenteID);
+
+			int righeAggiornate = pstmt.executeUpdate();
+
+			// Verifica se l'aggiornamento è riuscito
+			if (righeAggiornate > 0) {
+				System.out.println("Bonus aggiornato con successo per il dipendente con ID: " + DipendenteID);
+			} else {
+				System.out.println("Nessun bonus trovato con ID: " + DipendenteID);
+			}
+
+		} catch (
+
+		SQLException e) {
+			System.err.println("Errore durante l'aggiornamento del bonus: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
 
 	private double bonus;
 	private ArrayList<Sviluppatore> teamGestito;

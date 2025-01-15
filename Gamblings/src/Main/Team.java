@@ -65,26 +65,77 @@ public class Team {
 
 	}
 
+	public static int insertTeam(Connection connection, String nome) {
+		String sql = "INSERT INTO Team (NomeTeam) VALUES (?)";
+		try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+			pstmt.setString(1, nome);
+
+			int affectedRows = pstmt.executeUpdate();
+			if (affectedRows == 0) {
+				throw new SQLException("Creazione team fallita, nessuna riga aggiunta.");
+			}
+
+			// Recupero la chiave generata (ID auto-increment)
+			try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+				if (generatedKeys.next()) {
+					return generatedKeys.getInt(1);
+				} else {
+					throw new SQLException("Creazione team fallita, ID non recuperato.");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1; // In caso di errore
+	}
+	public static void updateManagerID(Connection connection, int TeamID, int ManagerID) {
+	    
+		String query = "UPDATE Team SET ManagerID = ? WHERE TeamID = ?";
+
+	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+	        pstmt.setInt(1, ManagerID);  // Imposta il nuovo ID del manager
+	        pstmt.setInt(2, TeamID);     // Imposta l'ID del team da aggiornare
+
+	        int affectedRows = pstmt.executeUpdate();  // Esegui l'update
+
+	        if (affectedRows > 0) {
+	            System.out.println("ManagerID aggiornato correttamente per il team con ID " + TeamID);
+	        } else {
+	            System.out.println("Nessun team trovato con ID " + TeamID + ". Verificare l'ID.");
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+
+	// Visualizzare Dipendenti di un Team/Manager
 	public static void readDipendentiTeam(Connection connection, int TeamID) {
 		String query = "SELECT dipendente.Nome, dipendente.Cognome FROM sviluppatore LEFT JOIN dipendente ON sviluppatore.DipendenteID = dipendente.DipendenteID WHERE TeamID = ?";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 
 			pstmt.setInt(1, TeamID);
-
+			
 			try (ResultSet rs = pstmt.executeQuery()) {
-				while (rs.next()) {
-
-					String Nome = rs.getString("Nome");
-					String Cognome = rs.getString("Cognome");
-
-					System.out.printf("| Nome: %s | Cognome: %s", Nome, Cognome);
-
-				}
-
+			while (rs.next()) {
+				
+				String Nome = rs.getString("Nome");
+				String Cognome = rs.getString("Cognome");
+				
+				System.out.printf("| Nome: %s | Cognome: %s", Nome, Cognome);
+			}
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
 }
+	
+	
+
+
