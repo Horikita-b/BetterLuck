@@ -10,18 +10,11 @@ public class Main {
 	// non si puo usare NOT NULL quando c'e ON DELETE SET NULL --
 	// Attenzione con JOIN multipli
 
-	// DA FARE
-	// Aggiustare readAllSviluppatori
+
 	
-	// Create Dipendenti (Sviluppatori e Manager)
-	// Aggiungere Dipendente(Sviluppatore/Manager)
-	// Aggiornare Sviluppatore (Aggiungere/Togliere un linguaggioConosciuto, Cambiare Team, Aggiungere/Togliere Progetti)
-	// Aggiornare Manager (Cambiare Bonus)
+	
+	// Aggiornare Sviluppatore ( Cambiare Team, Aggiungere/Togliere Progetti)
 	// Aggiornare Team -> aggiornare il suo ManagerID
-	// Visualizzare Dipendenti di un Team/Manager ->
-	// Visualizzare Linguaggi conosciuti di uno Sviluppatore ->
-	// Visualizzare Tutti i Progetti di uno Sviluppatore ->
-	// Visualizzare Tutti gli Sviluppatore di un Progetto ->
 	// Calcolare gli stipendi
 	
 	

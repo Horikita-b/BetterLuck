@@ -89,5 +89,26 @@ public class Team {
 		}
 		return -1; // In caso di errore
 	}
+	public static void updateManagerID(Connection connection, int TeamID, int ManagerID) {
+	    
+		String query = "UPDATE Team SET ManagerID = ? WHERE TeamID = ?";
+
+	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+	        pstmt.setInt(1, ManagerID);  // Imposta il nuovo ID del manager
+	        pstmt.setInt(2, TeamID);     // Imposta l'ID del team da aggiornare
+
+	        int affectedRows = pstmt.executeUpdate();  // Esegui l'update
+
+	        if (affectedRows > 0) {
+	            System.out.println("ManagerID aggiornato correttamente per il team con ID " + TeamID);
+	        } else {
+	            System.out.println("Nessun team trovato con ID " + TeamID + ". Verificare l'ID.");
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
 
 }
