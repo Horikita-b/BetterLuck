@@ -30,6 +30,7 @@ public class Main {
 		System.out.println("41) Eliminare un Team");
 		System.out.println("42) Eliminare un Progetto");
 		System.out.println("43) Eliminare un Linguaggio");
+		System.out.println("55) visualizzare sviluppatore linguaggi");
 		System.out.println("50) Cambiare stipendio di un Dipendente");
 		System.out.println("99) Uscire");
 	}
@@ -140,6 +141,13 @@ public class Main {
 					Dipendente.aggiornaStipendioDipendente(conn, nuovo_stipendio, id_dipendente);
 				}
 					break;
+				case 55: {
+					Sviluppatore.readAllSviluppatori(conn);
+					System.out.println("scegli lo sviluppatore che vuoi visualizzare i linguaggi");
+					int DipendenteID = scanner.nextInt();
+					Linguaggio.readAllLinguaggiSviluppatore(conn, DipendenteID);
+				}break;
+				
 				case 99:
 					System.out.println("Sei uscito dal programma");
 				}
