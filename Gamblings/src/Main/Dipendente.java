@@ -73,9 +73,6 @@ public class Dipendente {
 			e.printStackTrace();
 		 }return -1;
 	}	
-	
-	// 2) Read Tutti Dipendenti
-
 
 	public static void readAllDipendenti(Connection connection) {
 		String query = "SELECT * FROM Dipendente";

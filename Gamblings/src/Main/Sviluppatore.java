@@ -83,6 +83,7 @@ public class Sviluppatore extends Dipendente {
 	
 	
 	
+	
 
 	private ArrayList<String> linguaggiConosciuti;
 	private ArrayList<Integer> progettiAssegnati;

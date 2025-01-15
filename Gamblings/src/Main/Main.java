@@ -11,17 +11,16 @@ public class Main {
 	// Attenzione con JOIN multipli
 
 	// DA FARE
-	// Aggiustare readAllSviluppatori
+	// Aggiustare readAllSviluppatori --
 	
-	// Create Dipendenti (Sviluppatori e Manager)
-	// Aggiungere Dipendente(Sviluppatore/Manager)
-	// Aggiornare Sviluppatore (Aggiungere/Togliere un linguaggioConosciuto, Cambiare Team, Aggiungere/Togliere Progetti)
+	// Create Dipendenti (Sviluppatori e Manager) --
+	// Aggiungere Dipendente(Sviluppatore/Manager) --
+	// Aggiornare Sviluppatore (Aggiungere/Togliere un linguaggioConosciuto, Cambiare Team)
 	// Aggiornare Manager (Cambiare Bonus)
 	// Aggiornare Team -> aggiornare il suo ManagerID
-	// Visualizzare Dipendenti di un Team/Manager ->
-	// Visualizzare Linguaggi conosciuti di uno Sviluppatore ->
-	// Visualizzare Tutti i Progetti di uno Sviluppatore ->
-	// Visualizzare Tutti gli Sviluppatore di un Progetto ->
+	// Visualizzare Dipendenti di un Team/Manager ->  --
+	// Visualizzare Tutti i Progetti di uno Sviluppatore ->  DA FARE
+	// Visualizzare Tutti gli Sviluppatore di un Progetto -> DA FARE
 	// Calcolare gli stipendi
 	
 	

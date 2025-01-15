@@ -90,4 +90,31 @@ public class Team {
 		return -1; // In caso di errore
 	}
 
+	// Visualizzare Dipendenti di un Team/Manager
+	public static void readDipendentiTeam(Connection connection, int TeamID) {
+		String query = "SELECT dipendente.Nome, dipendente.Cognome FROM sviluppatore LEFT JOIN dipendente ON sviluppatore.DipendenteID = dipendente.DipendenteID WHERE TeamID = ?";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+			pstmt.setInt(1, TeamID);
+			
+			try (ResultSet rs = pstmt.executeQuery()) {
+			while (rs.next()) {
+				
+				String Nome = rs.getString("Nome");
+				String Cognome = rs.getString("Cognome");
+				
+				System.out.printf("| Nome: %s | Cognome: %s", Nome, Cognome);
+			}
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
+	
+	
+
+
