@@ -1,38 +1,27 @@
 package Main;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /*Employee (classe base): rappresenta un dipendente generico, con attributi come id, nome, cognome, e stipendioBase.
 Manager (classe derivata): rappresenta un manager, con attributi aggiuntivi come bonus e teamGestito.
 Developer (classe derivata): rappresenta uno sviluppatore, con attributi come linguaggiConosciuti e progettiAssegnati.
 Il database deve contenere una tabella per i dipendenti e tabelle correlate per i progetti e i team. Deve essere possibile aggiungere, modificare, eliminare dipendenti, assegnarli a progetti e calcolare gli stipendi (considerando eventuali bonus). */
 public class Dipendente {
-	private static String CREATE_TABLE_DIPENDENTE = "CREATE TABLE IF NOT EXISTS Dipendente(\r\n"
-
-			+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n" + "Nome VARCHAR(30) NOT NULL,\r\n"
-			+ "Cognome VARCHAR(30) NOT NULL,\r\n" + "StipendioBase DOUBLE NOT NULL,\r\n"
-			+ "Ruolo VARCHAR(30) NOT NULL,\r\n" + "PRIMARY KEY (DipendenteID));";
-
+	
 	public static void createTableDipendente(Connection connection) {
 		try (Statement stmt = connection.createStatement()) {
 
 			// Creazione tabella CLIENTS
-			String createTableDipendente = "CREATE TABLE IF NOT EXISTS Dipendente(\r\n"
+			final String CREATE_TABLE_DIPENDENTE = "CREATE TABLE IF NOT EXISTS Dipendente(\r\n"
 					+ "DipendenteID INT NOT NULL AUTO_INCREMENT,\r\n" + "Nome VARCHAR(30) NOT NULL,\r\n"
 					+ "Cognome VARCHAR(30) NOT NULL,\r\n" + "StipendioBase DOUBLE NOT NULL,\r\n"
 					+ "Ruolo VARCHAR(30) NOT NULL,\r\n" + "PRIMARY KEY (DipendenteID));";
 
-			stmt.execute(createTableDipendente);
+			stmt.execute(CREATE_TABLE_DIPENDENTE);
 
 			System.out.println("Tabella creata/verificata correttamente.");
 
@@ -41,7 +30,7 @@ public class Dipendente {
 		}
 	}
 
-	public static void deleteDipendente(int DipendenteID, Connection connection) {
+	public static void deleteDipendente(Connection connection, int DipendenteID) {
 		String sql = "DELETE FROM Dipendente WHERE DipendenteID = ?";
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
@@ -57,8 +46,6 @@ public class Dipendente {
 			e.printStackTrace();
 		}
 	}
-
-	// 2) Read Tutti Dipendenti
 
 	public static void readAllDipendenti(Connection connection) {
 		String query = "SELECT * FROM Dipendente";
