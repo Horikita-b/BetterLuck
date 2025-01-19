@@ -8,7 +8,7 @@ public class DBManager {
 	// Static Attributes
 	private static final String URL = "jdbc:mysql://localhost:3306/";
 	private static final String USER = "root";
-	private static final String PASSWORD = "Forzalazio2!";
+	private static final String PASSWORD = "password123!";
 	
 	private Connection connection;
 	

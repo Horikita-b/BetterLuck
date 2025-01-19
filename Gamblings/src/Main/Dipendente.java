@@ -6,13 +6,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-/*Employee (classe base): rappresenta un dipendente generico, con attributi come id, nome, cognome, e stipendioBase.
-Manager (classe derivata): rappresenta un manager, con attributi aggiuntivi come bonus e teamGestito.
-Developer (classe derivata): rappresenta uno sviluppatore, con attributi come linguaggiConosciuti e progettiAssegnati.
-Il database deve contenere una tabella per i dipendenti e tabelle correlate per i progetti e i team. Deve essere possibile aggiungere, modificare, eliminare dipendenti, assegnarli a progetti e calcolare gli stipendi (considerando eventuali bonus). */
-
 public class Dipendente {
-
+	// 5
+	final static String[] CRUD_DIPENDENTE = { "1) Aggiungi Dipendente", "2) Vedi Dipendenti", "3) Elimina Dipendente",
+			"4) Modifica stipendio", "5) Calcola stipendi" };
+	
+	/*
+	 * createTableDipendente: Metodo che crea la tabella Dipendente nel database.
+	 * 
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * 
+	 */
 	public static void createTableDipendente(Connection connection) {
 		try (Statement stmt = connection.createStatement()) {
 
@@ -30,74 +34,55 @@ public class Dipendente {
 			e.printStackTrace();
 		}
 	}
-	public static int insertDipendente (String Nome, String Cognome, double StipendioBase, String Ruolo, Connection connection) {
-		 String sql = "INSERT INTO Dipendente(Nome, Cognome, StipendioBase, Ruolo) VALUES (?,?,?,?)";
-		 try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
-			 
-			 pstmt.setString(1, Nome);
-			 pstmt.setString(2, Cognome);
-			 pstmt.setDouble(3, StipendioBase);
-			 pstmt.setString(4, Ruolo);
-			 
-			 int affectedRows = pstmt.executeUpdate();
-		        
-		        if (affectedRows > 0) {
-		            
-		            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-		                if (generatedKeys.next()) {
-		                    return generatedKeys.getInt(1);
-		                }
-		            }
-		        }
-			 }	catch (SQLException e) {
-				e.printStackTrace();
-			 }return -1;
-		}	
-		
 
-	public static void deleteDipendente(Connection connection, int DipendenteID) {
-		String sql = "DELETE FROM Dipendente WHERE DipendenteID = ?";
-		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+	
+	/*
+	 * insertDipendente: Metodo che inserisce un nuovo Dipendente nel database.
+	 * 
+	 * @param Nome: Nome del dipendente.
+	 * @param Cognome: Cognome del dipendente.
+	 * @param StipendioBase: Stipendio base del dipendente.
+	 * @param Ruolo: Ruolo del dipendente.
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * 
+	 * @return l'ID generato per il nuovo Dipendente.
+	 * 
+	 * @throws SQLException
+	 */
+	public static int insertDipendente(String Nome, String Cognome, double StipendioBase, String Ruolo,
+			Connection connection) throws SQLException{
+		String sql = "INSERT INTO Dipendente(Nome, Cognome, StipendioBase, Ruolo) VALUES (?,?,?,?)";
+		try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-			pstmt.setInt(1, DipendenteID);
+			pstmt.setString(1, Nome);
+			pstmt.setString(2, Cognome);
+			pstmt.setDouble(3, StipendioBase);
+			pstmt.setString(4, Ruolo);
+
 			int affectedRows = pstmt.executeUpdate();
-			if (affectedRows > 0) {
-				System.out.println("Dipendente con ID " + DipendenteID + " eliminato correttamente.");
-			} else {
-				System.out.println("Nessun dipendente eliminato. Verificare l'ID.");
-			}
 
+			if (affectedRows > 0) {
+
+				try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						return generatedKeys.getInt(1);
+					}
+				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		throw new SQLException("Creazione Dipendente fallita");
 	}
 	
-	// INSERT INTO Dipendente
 	
-	public static int insertDipendente (String Nome, String Cognome, double StipendioBase, String Ruolo, Connection connection) {
-	 String sql = "INSERT INTO Dipendente(Nome, Cognome, StipendioBase, Ruolo) VALUES (?,?,?,?)";
-	 try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))  {
-		 
-		 pstmt.setString(1, Nome);
-		 pstmt.setString(2, Cognome);
-		 pstmt.setDouble(3, StipendioBase);
-		 pstmt.setString(4, Ruolo);
-		 
-		 int affectedRows = pstmt.executeUpdate();
-	        
-	        if (affectedRows > 0) {
-	            
-	            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-	                if (generatedKeys.next()) {
-	                    return generatedKeys.getInt(1);
-	                }
-	            }
-	        }
-		 }	catch (SQLException e) {
-			e.printStackTrace();
-		 }return -1;
-	}	
-
+	
+	/*
+	 * readAllDipendenti: Metodo che legge e stampa tutti i Dipendenti dal database.
+	 * 
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * 
+	 */
 	public static void readAllDipendenti(Connection connection) {
 		String query = "SELECT * FROM Dipendente";
 
@@ -115,10 +100,44 @@ public class Dipendente {
 			}
 
 		} catch (SQLException e) {
+			e.getMessage();
+		}
+	}
+
+	
+	/*
+	 * deleteDipendente: Metodo che elimina un Dipendente dal database in base all'ID.
+	 * 
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * @param DipendenteID: ID del Dipendente da eliminare.
+	 * 
+	 */
+	public static void deleteDipendente(Connection connection, int DipendenteID) {
+		String sql = "DELETE FROM Dipendente WHERE DipendenteID = ?";
+		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+			pstmt.setInt(1, DipendenteID);
+			int affectedRows = pstmt.executeUpdate();
+			if (affectedRows > 0) {
+				System.out.println("Dipendente con ID " + DipendenteID + " eliminato correttamente.");
+			} else {
+				System.out.println("Nessun dipendente eliminato. Verificare l'ID.");
+			}
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
+	
+	/*
+	 * aggiornaStipendioDipendente: Metodo che aggiorna lo stipendio di un dipendente nel database.
+	 * 
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * @param nuovoStipendio: Nuovo valore dello stipendio base da assegnare al dipendente.
+	 * @param DipendenteID: ID del dipendente il cui stipendio deve essere aggiornato.
+	 * 
+	 */
 	public static void aggiornaStipendioDipendente(Connection connection, double nuovoStipendio, int DipendenteID) {
 
 		final String query = "UPDATE Dipendente SET StipendioBase = ? WHERE DipendenteID = ?";
@@ -141,10 +160,36 @@ public class Dipendente {
 
 		SQLException e) {
 			System.err.println("Errore durante l'aggiornamento dello stipendio: " + e.getMessage());
-			e.printStackTrace();
 		}
 	}
 
+	
+	/*
+	 * calcolaStipendi: Metodo che calcola il totale degli stipendi dei dipendenti nel database.
+	 * 
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * 
+	 */
+	public static void calcolaStipendi(Connection connection) {
+		String query = "SELECT sum(dipendente.StipendioBase +COALESCE(manager.Bonus, 0))\r\n"
+				+ "FROM dipendente\r\n"
+				+ "LEFT JOIN manager\r\n"
+				+ "ON manager.DipendenteID = dipendente.DipendenteID;";
+		
+		try (Statement stmt = connection.createStatement();
+				ResultSet rs = stmt.executeQuery(query)) {
+			
+			if (rs.next()) {
+				System.out.println("Totale stipendio dei dipendenti: $" + rs.getInt(1));
+			} else {
+				System.out.println("Qualcosa e' andato storto, riprovare");
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Errore durante il calcolo: " + e.getMessage());
+		}
+	}
+	
 	protected int id;
 	protected String nome;
 	protected String cognome;

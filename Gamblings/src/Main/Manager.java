@@ -9,6 +9,14 @@ import java.util.ArrayList;
 
 public class Manager extends Dipendente {
 
+	final static String[] CRUD_MANAGER = { "1) Vedi Manager", "2) Modifica team gestito", "3) Modifica bonus" };
+	
+	/*
+	 * createTableManager: Metodo che crea la tabella Manager nel database.
+	 * 
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * 
+	 */
 	public static void createTableManager(Connection connection) {
 		try (Statement stmt = connection.createStatement()) {
 
@@ -23,10 +31,41 @@ public class Manager extends Dipendente {
 			System.out.println("Tabella creata/verificata correttamente.");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Errore durante la creazione: " + e.getMessage());
 		}
 	}
 
+	/*
+	 * checkManager: Metodo che verifica l'esistenza di un manager nel database.
+	 * 
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * @param ManagerID: ID del manager da controllare.
+	 * 
+	 * @return true se il manager esiste, false altrimenti.
+	 * 
+	 * @throws SQLException
+	 */
+	public static boolean checkManager(Connection connection, int ManagerID) throws SQLException {
+		String checkQuery = "SELECT COUNT(*) FROM manager WHERE ManagerID = ?";
+		try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
+			checkStmt.setInt(1, ManagerID);
+			try (ResultSet rsCheck = checkStmt.executeQuery()) {
+				if (rsCheck.next() && rsCheck.getInt(1) == 0) {
+					System.out.println("Manager con ID " + ManagerID + " non trovato.");
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	/*
+	 * readAllManager: Metodo per leggere e stampare tutti i manager presenti nel database.
+	 * 
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * 
+	 * @throws SQLException
+	 */
 	public static void readAllManager(Connection connection) {
 		String query = "SELECT manager.ManagerID, dipendente.Nome, dipendente.Cognome, manager.Bonus FROM Manager INNER JOIN dipendente ON Manager.DipendenteID = dipendente.DipendenteID ";
 
@@ -43,11 +82,20 @@ public class Manager extends Dipendente {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+			System.out.println("Errore durante la lettura: " + e.getMessage());		}
 	}
 
-
+	/*
+	 * insertManager: Metodo per inserire un nuovo manager nel database.
+	 * 
+	 * @param DipendenteID: ID del dipendente a cui il manager è associato.
+	 * @param Bonus: Bonus assegnato al manager.
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * 
+	 * @return: L'ID del manager creato se l'inserimento ha avuto successo, -1 altrimenti.
+	 * 
+	 * @throws SQLException
+	 */
 	public static int insertManager(int DipendenteID, double Bonus, Connection connection) {
 		String sql = "INSERT INTO Manager(DipendenteID, Bonus) VALUES (?,?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -66,40 +114,45 @@ public class Manager extends Dipendente {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Errore durante l'inserimento: " + e.getMessage());
 		}
 		return -1;
 	}
 
-
 	
-	public static void aggiornaBonus(Connection connection, double Bonus, int DipendenteID ) {
+	/*
+	 * aggiornaBonus: Metodo per aggiornare il bonus di un manager nel database.
+	 * 
+	 * @param connection: Oggetto Connection per gestire la connessione al database.
+	 * @param Bonus: Il nuovo bonus da impostare.
+	 * @param ManagerID: ID del manager di cui si vuole aggiornare il bonus.
+	 * 
+	 * @throws SQLException
+	 */
+	public static void aggiornaBonus(Connection connection, double Bonus, int ManagerID) {
 
-		final String query = "UPDATE Dipendente SET StipendioBase = ? WHERE DipendenteID = ?";
+		final String query = "UPDATE Manager SET Bonus = ? WHERE ManagerID = ?";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 
 			pstmt.setDouble(1, Bonus);
-			pstmt.setInt(2, DipendenteID);
+			pstmt.setInt(2, ManagerID);
 
 			int righeAggiornate = pstmt.executeUpdate();
 
 			// Verifica se l'aggiornamento è riuscito
 			if (righeAggiornate > 0) {
-				System.out.println("Bonus aggiornato con successo per il dipendente con ID: " + DipendenteID);
+				System.out.println("Bonus aggiornato con successo per il dipendente con ID: " + ManagerID);
 			} else {
-				System.out.println("Nessun bonus trovato con ID: " + DipendenteID);
+				System.out.println("Nessun manager trovato con ID: " + ManagerID);
 			}
 
 		} catch (
 
 		SQLException e) {
 			System.err.println("Errore durante l'aggiornamento del bonus: " + e.getMessage());
-			e.printStackTrace();
 		}
 	}
-	
-	
 
 	private double bonus;
 	private ArrayList<Sviluppatore> teamGestito;
